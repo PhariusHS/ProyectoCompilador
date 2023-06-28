@@ -70,7 +70,7 @@ def ejecutar():
         system("clear")
     else:
         system("cls")
-    system("python ejecutador.py")
+    system("py ejecutador.py")
     remove("ejecutador.py")
 
 
