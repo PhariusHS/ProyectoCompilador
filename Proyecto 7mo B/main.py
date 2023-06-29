@@ -47,6 +47,17 @@ def traducir(archivo="C:/Users/{}/Documents/adc.adc".format(str(user_windows))):
     content = content.replace("INTENTA","try")
     content = content.replace("EXCEPTO","except")
     content = content.replace("FINALMENTE","finally")
+    content = content.replace("VERDADERO", "true")
+    content = content.replace("FALSO", "false")
+    content = content.replace("SINO_ENTONCES", "elif")
+    content = content.replace("SINO", "else")
+    content = content.replace("SI", "if")
+    content = content.replace("PARA", "for")
+    content = content.replace("MIENTRAS", "while")
+    content = content.replace("TAMBIEN", "and")
+    content = content.replace("NI", "or")
+    content = content.replace("ROMPER", "break")
+    content = content.replace("DEVOLVER", "return")
     return content
 
 
@@ -63,6 +74,14 @@ def ejecutar():
     py = open("ejecutador.py", "w")   
     py.write(traduction)
     py.close()
+    borrado = popen("cls").read().replace("\n","")
+    if borrado.startswith("\"cls\""):
+        system("clear")
+    else:
+        system("cls")
+
+
+
     system("py ejecutador.py")
     remove("ejecutador.py")
 

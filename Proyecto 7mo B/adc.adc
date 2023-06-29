@@ -1,0 +1,9 @@
+A = 3
+B = 4
+
+SI A == 4:
+
+    MOSTRAR("SU NUMERO ES 4")
+
+SINO:  
+    MOSTRAR("SU NUMERO PROBABLEMENTE QUE ES 4")
