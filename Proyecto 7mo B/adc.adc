@@ -1,4 +1,0 @@
-A=3
-
-SI A==3:
-    MOSTRAR("PP")
