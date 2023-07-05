@@ -4,6 +4,10 @@ from tkinter.messagebox import showwarning
 from tkinter.filedialog import askopenfilename
 from os import popen, system, remove
 from sys import exit 
+from threading import Thread
+import tkinter as tk
+from idlelib.percolator import Percolator
+import idlelib.colorizer as ic
 
 user_windows = str(popen("echo %USERNAME%").read()).replace("\n", "")
 #window
@@ -74,6 +78,7 @@ def ejecutar():
     py = open("ejecutador.py", "w")   
     py.write(traduction)
     py.close()
+    #borrado de consola previa
     borrado = popen("cls").read().replace("\n","")
     if borrado.startswith("\"cls\""):
         system("clear")
@@ -88,6 +93,7 @@ def ejecutar():
 
 
 
+
 #title label
 tittle_label = ttk.Label(master = window, text ="Compilador", font=('Comic Sans MS', 36, 'bold italic'))
 tittle_label.pack()
@@ -97,8 +103,13 @@ buttons_frame = ttk.Frame(master=window)
 #Buttons
 button = ttk.Button(master=buttons_frame, text = "Ejecutar", command=lambda:ejecutar())
 buttons_frame.pack(side = "left")
+#editor texto
+text = tk.Text(window)
+Percolator(text).insertfilter(ic.ColorDelegator())
 
 
+text.pack()
 button.pack()
 #Window-run
 window.mainloop()
+
