@@ -25,7 +25,7 @@ window = Tk()
 
 window.title("ADC" + " - " + currentFilePath)
 
-# Window Dimensions in Pixel
+# Window 
 window.geometry('720x480')
 
 # Set the first column to occupy 100% of the width
@@ -44,7 +44,7 @@ if str(python_download).startswith("\"python\""):
 
 def MenuArchivoHandeler(action):
     global currentFilePath
-    # Opening a File
+    # Abrir archivo
     if action == "Abrir":
         file = filedialog.askopenfilename(filetypes = fileTypes)
         window.title( "ADC" + " - " + file)
@@ -53,7 +53,7 @@ def MenuArchivoHandeler(action):
             txt.delete(1.0,END)
             txt.insert(INSERT,f.read())
 
- # Making a new File
+ # Archivo nuevo
     elif action == "Nuevo":
         currentFilePath = nofileOpenedString
         txt.delete(1.0,END)
@@ -165,7 +165,7 @@ def ejecutar():
     system("py ejecutador.py")
     remove("ejecutador.py")
 
-
+#cosa para los colores
 Percolator(txt).insertfilter(ic.ColorDelegator())
 # Main Loop
 window.mainloop()
