@@ -1,4 +1,9 @@
+# Import
 from tkinter import *
+from tkinter import scrolledtext
+from tkinter import filedialog
+import ctypes
+import sys
 from tkinter import ttk
 from tkinter.messagebox import showwarning
 from tkinter.filedialog import askopenfilename
@@ -9,11 +14,23 @@ import tkinter as tk
 from idlelib.percolator import Percolator
 import idlelib.colorizer as ic
 
+
+nofileOpenedString = 'New File'
+currentFilePath = nofileOpenedString
+fileTypes = [("academic script" , "*.adc")]
 user_windows = str(popen("echo %USERNAME%").read()).replace("\n", "")
-#window
+
+# Tkinter Setup
 window = Tk()
-window.title("ADC")
-window.geometry("720x480")
+
+window.title("ADC" + " - " + currentFilePath)
+
+# Window Dimensions in Pixel
+window.geometry('720x480')
+
+# Set the first column to occupy 100% of the width
+window.grid_columnconfigure(0, weight=1)
+
 
 
 #Checkeo si existe python dentro de la pc
@@ -25,9 +42,67 @@ if str(python_download).startswith("\"python\""):
     exit()
 
 
+def MenuArchivoHandeler(action):
+    global currentFilePath
+    # Opening a File
+    if action == "Abrir":
+        file = filedialog.askopenfilename(filetypes = fileTypes)
+        window.title( "ADC" + " - " + file)
+        currentFilePath = file
+        with open(file, 'r') as f:
+            txt.delete(1.0,END)
+            txt.insert(INSERT,f.read())
 
+ # Making a new File
+    elif action == "Nuevo":
+        currentFilePath = nofileOpenedString
+        txt.delete(1.0,END)
+        window.title( "ADC" + " - " + currentFilePath)
+         # guardado
+    elif action == "Guadar" or action == "Guardar Como":
+        if currentFilePath == nofileOpenedString or action=='Guardad Como':
+            currentFilePath = filedialog.asksaveasfilename(filetypes = fileTypes)
+        with open(currentFilePath, 'w') as f:
+            f.write(txt.get('1.0','end'))
+        window.title("ADC" + " - " + currentFilePath)
+        
+def textchange(event):
+    window.title("ADC" + " - *" + currentFilePath)
+    
+# Text Area
+txt = scrolledtext.ScrolledText(window, height=999)
+txt.grid(row=1,sticky=N+S+E+W)
+
+# Bind event in the widget to a function
+txt.bind('<KeyPress>', textchange)
+
+# Menu
+menu = Menu(window)
+
+MenuArchivo = Menu(menu, tearoff=False)
+# Comandos
+MenuArchivo.add_command(label='Nuevo', command=lambda: MenuArchivoHandeler("Nuevo"))
+MenuArchivo.add_command(label='Abrir', command=lambda: MenuArchivoHandeler("Abrir"))
+# separador
+MenuArchivo.add_separator()
+MenuArchivo.add_command(label='Guardar', command=lambda: MenuArchivoHandeler("Guadar"))
+MenuArchivo.add_command(label='Guardar Como', command=lambda: MenuArchivoHandeler("Guardar Como"))
+menu.add_cascade(label='Archivo', menu=MenuArchivo)
+menu.add_checkbutton(label='Ejecutar', command=lambda:ejecutar())
+# Set Menu 
+window.config(menu=menu)
+
+
+if len(sys.argv) == 2:
+    currentFilePath = sys.argv[1]
+    window.title("ADC" + " - " + currentFilePath)
+    with open(currentFilePath, 'r') as f:
+        txt.delete(1.0,END)
+        txt.insert(INSERT,f.read())
+        
+        
 #Functions
-def traducir(archivo="C:/Users/{}/Documents/adc.adc".format(str(user_windows))):
+def traducir(archivo=currentFilePath.format(str(user_windows))):
     archivo_abierto = open(archivo, "r")
     content = archivo_abierto.read()
     archivo_abierto.close()
@@ -73,7 +148,7 @@ def compilar():
 
 #Ejecucion y lectura de archivos ".adc" como ".py"
 def ejecutar():
-    archivo = askopenfilename(title="Ejecutar", filetypes=(("academic script" , "*.adc") ,), initialdir="C:/Users/{}/Documents".format(str(user_windows)))
+    archivo = currentFilePath.format(str(user_windows))
     traduction = traducir(archivo)
     py = open("ejecutador.py", "w")   
     py.write(traduction)
@@ -91,25 +166,6 @@ def ejecutar():
     remove("ejecutador.py")
 
 
-
-
-
-#title label
-tittle_label = ttk.Label(master = window, text ="Compilador", font=('Comic Sans MS', 36, 'bold italic'))
-tittle_label.pack()
-
-#Buttons label
-buttons_frame = ttk.Frame(master=window)
-#Buttons
-button = ttk.Button(master=buttons_frame, text = "Ejecutar", command=lambda:ejecutar())
-buttons_frame.pack(side = "left")
-#editor texto
-text = tk.Text(window)
-Percolator(text).insertfilter(ic.ColorDelegator())
-
-
-text.pack()
-button.pack()
-#Window-run
+Percolator(txt).insertfilter(ic.ColorDelegator())
+# Main Loop
 window.mainloop()
-
