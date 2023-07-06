@@ -70,8 +70,16 @@ def textchange(event):
     window.title("ADC" + " - *" + currentFilePath)
     
 # Text Area
-txt = scrolledtext.ScrolledText(window, height=999)
-txt.grid(row=1,sticky=N+S+E+W)
+txt_frame = Frame(window)
+txt_frame.grid(row=1, column=0, sticky=N+S+E+W)
+
+txt = scrolledtext.ScrolledText(txt_frame, height=10)
+txt.pack(side=LEFT, fill=BOTH, expand=True)
+
+
+# acomodado de barra y cuadro de texto
+window.grid_rowconfigure(1, weight=1)
+window.grid_columnconfigure(0, weight=1)
 
 # Bind event in the widget to a function
 txt.bind('<KeyPress>', textchange)
