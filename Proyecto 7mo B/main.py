@@ -33,7 +33,7 @@ window.grid_columnconfigure(0, weight=1)
 
 
 
-#Checkeo si existe python dentro de la pc
+# Checkeo si existe python dentro de la pc
 python_download = popen("python --version")
 
 if str(python_download).startswith("\"python\""):
@@ -44,28 +44,31 @@ if str(python_download).startswith("\"python\""):
 
 def MenuArchivoHandeler(action):
     global currentFilePath
+
     # Abrir archivo
     if action == "Abrir":
-        file = filedialog.askopenfilename(filetypes = fileTypes)
-        window.title( "ADC" + " - " + file)
+        file = filedialog.askopenfilename(filetypes=fileTypes)
+        window.title("ADC" + " - " + file)
         currentFilePath = file
         with open(file, 'r') as f:
-            txt.delete(1.0,END)
-            txt.insert(INSERT,f.read())
+            txt.delete(1.0, END)
+            txt.insert(INSERT, f.read())
 
- # Archivo nuevo
+    # Archivo nuevo
     elif action == "Nuevo":
         currentFilePath = nofileOpenedString
-        txt.delete(1.0,END)
-        window.title( "ADC" + " - " + currentFilePath)
-         # guardado
-    elif action == "Guadar" or action == "Guardar Como":
-        if currentFilePath == nofileOpenedString or action=='Guardad Como':
-            currentFilePath = filedialog.asksaveasfilename(filetypes = fileTypes)
-        with open(currentFilePath, 'w') as f:
-            f.write(txt.get('1.0','end'))
+        txt.delete(1.0, END)
         window.title("ADC" + " - " + currentFilePath)
-        
+
+    # Guardado
+    elif action == "Guardar" or action == "Guardar Como":
+        if currentFilePath == nofileOpenedString or action == 'Guardar Como':
+            currentFilePath = filedialog.asksaveasfilename(filetypes=fileTypes)
+        with open(currentFilePath, 'w') as f:
+            f.write(txt.get('1.0', 'end'))
+        window.title("ADC" + " - " + currentFilePath)
+
+
 def textchange(event):
     window.title("ADC" + " - *" + currentFilePath)
     
@@ -88,17 +91,27 @@ txt.bind('<KeyPress>', textchange)
 menu = Menu(window)
 
 MenuArchivo = Menu(menu, tearoff=False)
+
 # Comandos
-MenuArchivo.add_command(label='Nuevo', command=lambda: MenuArchivoHandeler("Nuevo"))
-MenuArchivo.add_command(label='Abrir', command=lambda: MenuArchivoHandeler("Abrir"))
-# separador
+MenuArchivo.add_command(label='Nuevo', accelerator="Ctrl+N", command=lambda: MenuArchivoHandeler("Nuevo"))
+MenuArchivo.add_command(label='Abrir', accelerator="Ctrl+A", command=lambda: MenuArchivoHandeler("Abrir"))
+
+# Separador
 MenuArchivo.add_separator()
-MenuArchivo.add_command(label='Guardar', command=lambda: MenuArchivoHandeler("Guadar"))
-MenuArchivo.add_command(label='Guardar Como', command=lambda: MenuArchivoHandeler("Guardar Como"))
+MenuArchivo.add_command(label='Guardar', accelerator="Ctrl+G", command=lambda: MenuArchivoHandeler("Guardar"))
+MenuArchivo.add_command(label='Guardar Como', accelerator="Ctrl+Shift+G", command=lambda: MenuArchivoHandeler("Guardar Como"))
+
 menu.add_cascade(label='Archivo', menu=MenuArchivo)
+# Ejecutar
 menu.add_checkbutton(label='Ejecutar', command=lambda:ejecutar())
 # Set Menu 
 window.config(menu=menu)
+#binds
+
+txt.bind("<Control-g>", lambda event: MenuArchivoHandeler("Guardar"))
+txt.bind("<Control-G>", lambda event: MenuArchivoHandeler("Guardar Como"))
+txt.bind("<Control-a>", lambda event: MenuArchivoHandeler("Abrir"))
+txt.bind("<Control-n>", lambda event: MenuArchivoHandeler("Nuevo"))
 
 
 if len(sys.argv) == 2:
