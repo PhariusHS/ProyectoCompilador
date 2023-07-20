@@ -15,6 +15,8 @@ from idlelib.percolator import Percolator
 import idlelib.colorizer as ic
 
 
+
+
 nofileOpenedString = 'New File'
 currentFilePath = nofileOpenedString
 fileTypes = [("academic script" , "*.adc")]
@@ -161,7 +163,30 @@ def traducir(archivo=currentFilePath.format(str(user_windows))):
     return content
 
 
+# Modificacion colores palabras
+Percolator(txt).insertfilter(ic.ColorDelegator())
 
+# Funcion coloreado palabras clave
+def colorize_content_words():
+    txt.tag_remove("colored", "1.0", tk.END)  
+    content = txt.get("1.0", tk.END)
+    words_to_color = ["MOSTRAR", "ENTERO", "DECIMAL", "TEXTO", "DICCIONARIO", "LISTA", "CLASE", "SENO", "COSENO", "NADA", "INSERTAR", "AGREGAR", "ELIMINAR", "BORRAR", "INTENTA", "EXCEPTO", "FINALMENTE", "VERDADERO", "FALSO", "SINO_ENTONCES", "SINO", "SI", "PARA", "MIENTRAS", "TAMBIEN", "NI", "ROMPER", "DEVOLVER"]
+
+    for word in words_to_color:
+        start = "1.0"
+        while True:
+            start = txt.search(word, start, stopindex=tk.END)
+            if not start:
+                break
+            end = f"{start}+{len(word)}c"
+            txt.tag_add("colored", start, end)
+            txt.tag_configure("colored", foreground="red")
+            start = end
+
+# Llamado funcion colores
+colorize_content_words()
+
+txt.bind("<KeyPress>", lambda event: colorize_content_words())
 
 def compilar():
     pass
@@ -186,7 +211,6 @@ def ejecutar():
     system("py ejecutador.py")
     remove("ejecutador.py")
 
-#cosa para los colores
-Percolator(txt).insertfilter(ic.ColorDelegator())
+
 # Main Loop
 window.mainloop()
