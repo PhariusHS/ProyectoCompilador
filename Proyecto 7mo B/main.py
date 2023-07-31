@@ -35,13 +35,6 @@ window.geometry('720x480')
 window.grid_columnconfigure(0, weight=1)
 
 
-# Zoom +
-zoom_in_button = Button(window, text="+", command=lambda: zoom_text(1.2))
-zoom_in_button.grid(row=2, column=0, padx=0, pady=0)
-
-# Zoom -
-zoom_out_button = Button(window, text="-", command=lambda: zoom_text(0.8))
-zoom_out_button.grid(row=2, column=1, padx=0, pady=0)
 
 
 # Checkeo si existe python dentro de la pc
@@ -95,6 +88,15 @@ txt.pack(side=LEFT, fill=BOTH, expand=True)
 # acomodado de barra y cuadro de texto
 window.grid_rowconfigure(1, weight=1)
 window.grid_columnconfigure(0, weight=1)
+
+# Zoom +
+zoom_in_button = Button(window, text="+", command=lambda: zoom_text(1.2))
+zoom_in_button.grid(row=2, column=2, padx=0, pady=10)
+
+# Zoom -
+zoom_out_button = Button(window, text="-", command=lambda: zoom_text(0.8))
+zoom_out_button.grid(row=2, column=1, padx=0, pady=10,)
+
 
 # Bind event in the widget to a function
 txt.bind('<KeyPress>', textchange)
