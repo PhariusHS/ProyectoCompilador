@@ -13,6 +13,7 @@ from threading import Thread
 import tkinter as tk
 from idlelib.percolator import Percolator
 import idlelib.colorizer as ic
+from tkinter.font import Font
 
 
 
@@ -33,6 +34,14 @@ window.geometry('720x480')
 # Set the first column to occupy 100% of the width
 window.grid_columnconfigure(0, weight=1)
 
+
+# Zoom +
+zoom_in_button = Button(window, text="+", command=lambda: zoom_text(1.2))
+zoom_in_button.grid(row=2, column=0, padx=0, pady=0)
+
+# Zoom -
+zoom_out_button = Button(window, text="-", command=lambda: zoom_text(0.8))
+zoom_out_button.grid(row=2, column=1, padx=0, pady=0)
 
 
 # Checkeo si existe python dentro de la pc
@@ -75,6 +84,7 @@ def textchange(event):
     window.title("ADC" + " - *" + currentFilePath)
     
 # Text Area
+font = Font(family="Courier", size = 20)
 txt_frame = Frame(window)
 txt_frame.grid(row=1, column=0, sticky=N+S+E+W)
 
@@ -211,6 +221,15 @@ def ejecutar():
     system("py ejecutador.py")
     remove("ejecutador.py")
 
+
+
+def zoom_text(scale_factor):
+    current_font = Font(font=txt['font'])
+    current_size = current_font.actual('size')
+    new_size = int(current_size * scale_factor)
+    current_font.configure(size=new_size)
+    txt.configure(font=current_font)
+ 
 
 # Main Loop
 window.mainloop()
