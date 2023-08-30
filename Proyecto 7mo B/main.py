@@ -140,6 +140,7 @@ def traducir(archivo=currentFilePath.format(str(user_windows))):
 
     #Remplazo keyword basicas
     content = content.replace("MOSTRAR", "print")
+    content = content.replace("INGRESAR", "input")
     content = content.replace("ENTERO", "int")
     content = content.replace("DECIMAL", "float")
     content = content.replace("TEXTO", "string")
