@@ -89,13 +89,6 @@ txt.pack(side=LEFT, fill=BOTH, expand=True)
 window.grid_rowconfigure(1, weight=1)
 window.grid_columnconfigure(0, weight=1)
 
-# Zoom +
-zoom_in_button = Button(window, text="+", command=lambda: zoom_text(1.2))
-zoom_in_button.grid(row=2, column=2, padx=0, pady=10)
-
-# Zoom -
-zoom_out_button = Button(window, text="-", command=lambda: zoom_text(0.8))
-zoom_out_button.grid(row=2, column=1, padx=0, pady=10,)
 
 
 # Bind event in the widget to a function
@@ -118,6 +111,8 @@ MenuArchivo.add_command(label='Guardar Como', accelerator="Ctrl+Shift+G", comman
 menu.add_cascade(label='Archivo', menu=MenuArchivo)
 # Ejecutar
 menu.add_checkbutton(label='Ejecutar', command=lambda:ejecutar())
+menu.add_checkbutton(label='+', command=lambda:zoom_text(1.15))
+menu.add_checkbutton(label='-', command=lambda:zoom_text(0.9))
 # Set Menu 
 window.config(menu=menu)
 #binds
@@ -126,7 +121,8 @@ txt.bind("<Control-g>", lambda event: MenuArchivoHandeler("Guardar"))
 txt.bind("<Control-G>", lambda event: MenuArchivoHandeler("Guardar Como"))
 txt.bind("<Control-a>", lambda event: MenuArchivoHandeler("Abrir"))
 txt.bind("<Control-n>", lambda event: MenuArchivoHandeler("Nuevo"))
-
+txt.bind("<Control-plus>", lambda event:zoom_text(1.15))
+txt.bind("<Control-minus>", lambda event:zoom_text(0.9) )
 
 if len(sys.argv) == 2:
     currentFilePath = sys.argv[1]
