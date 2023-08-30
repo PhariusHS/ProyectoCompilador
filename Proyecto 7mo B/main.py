@@ -175,9 +175,6 @@ def traducir(archivo=currentFilePath.format(str(user_windows))):
     return content
 
 
-# Modificacion colores palabras
-Percolator(txt).insertfilter(ic.ColorDelegator())
-
 # Funcion coloreado palabras clave
 def colorize_content_words():
     txt.tag_remove("colored", "1.0", tk.END)  
@@ -194,11 +191,6 @@ def colorize_content_words():
             txt.tag_add("colored", start, end)
             txt.tag_configure("colored", foreground="red")
             start = end
-
-# Llamado funcion colores
-colorize_content_words()
-
-txt.bind("<KeyPress>", lambda event: colorize_content_words())
 
 def compilar():
     pass
@@ -232,6 +224,13 @@ def zoom_text(scale_factor):
     current_font.configure(size=new_size)
     txt.configure(font=current_font)
  
+# Llamado funcion colores
+colorize_content_words()
+
+txt.bind("<KeyPress>", lambda event: colorize_content_words())
+
+# Modificacion colores palabras
+Percolator(txt).insertfilter(ic.ColorDelegator())
 
 # Main Loop
 window.mainloop()
