@@ -158,7 +158,7 @@ def traducir(archivo=currentFilePath.format(str(user_windows))):
     content = content.replace("NI", "or")
     content = content.replace("ROMPER", "break")
     content = content.replace("DEVOLVER", "return")
-    return content
+    return content+("\ninput()")
 
 # Funcion coloreado palabras clave (español)
 def colorize_content_words():
